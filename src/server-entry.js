@@ -7,6 +7,9 @@ const isDev = process.env.NODE_ENV !== 'production'
 // state of our application before actually rendering it.
 // Since data fetching is async, this function is expected to
 // return a Promise that resolves to the app instance.
+// 这个导出函数叫 bundleRenderer
+// 这个函数是我们执行数据预取来确定我们应用程序的状态在实际的 render 之前。
+// 数据的获取是异步的，这个函数将返回 vue 实例的Promise
 export default context => {
   const s = isDev && Date.now()
 
@@ -23,6 +26,8 @@ export default context => {
   // A preFetch hook dispatches a store action and returns a Promise,
   // which is resolved when the action is complete and store state has been
   // updated.
+  
+
   return Promise.all(matchedComponents.map(component => {
     if (component.preFetch) {
       return component.preFetch(store)

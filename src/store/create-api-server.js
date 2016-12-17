@@ -7,6 +7,7 @@ const config = {
 }
 const version = '/v0'
 
+// 如果不是第一次连接firebase的话，可以直接操作
 if (process.__API__) {
   api = process.__API__
 } else {

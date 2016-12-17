@@ -21,3 +21,5 @@ export default new Router({
     { path: '/', redirect: '/top' }
   ]
 })
+
+// 基于VueRouter2.0 的简单配置，没什么难点

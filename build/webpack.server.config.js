@@ -7,6 +7,8 @@ module.exports = Object.assign({}, base, {
   entry: './src/server-entry.js',
   output: Object.assign({}, base.output, {
     filename: 'server-bundle.js',
+    //推荐阅读： https://github.com/zhengweikeng/blog/issues/10
+    // 打包的方式
     libraryTarget: 'commonjs2'
   }),
   resolve: {
@@ -14,6 +16,8 @@ module.exports = Object.assign({}, base, {
       'create-api': './create-api-server.js'
     })
   },
+  //外部依赖，不需要打包进bundle
+  //推荐阅读： https://github.com/zhengweikeng/blog/issues/10
   externals: Object.keys(require('../package.json').dependencies),
   plugins: [
     new webpack.DefinePlugin({

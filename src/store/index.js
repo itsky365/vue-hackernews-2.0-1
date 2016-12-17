@@ -4,6 +4,9 @@ import { fetchItems, fetchIdsByType, fetchUser } from './api'
 
 Vue.use(Vuex)
 
+// 下面是 vuex 的基本使用，如果项目足够大的时候，完全可以将 store 、actions 、 mutations
+// getters 完全抽离出去。
+// 下面就是针对该应用血药配置的 store。
 const store = new Vuex.Store({
   state: {
     activeType: null,
@@ -21,6 +24,7 @@ const store = new Vuex.Store({
 
   actions: {
     // ensure data for rendering given list type
+    // 确保数据渲染给制定的类型列表
     FETCH_LIST_DATA: ({ commit, dispatch, state }, { type }) => {
       commit('SET_ACTIVE_TYPE', { type })
       return fetchIdsByType(type)
@@ -29,6 +33,7 @@ const store = new Vuex.Store({
     },
 
     // ensure all active items are fetched
+    // 确保所有的活动项目被获取到
     ENSURE_ACTIVE_ITEMS: ({ dispatch, getters }) => {
       return dispatch('FETCH_ITEMS', {
         ids: getters.activeIds
