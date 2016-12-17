@@ -1,15 +1,16 @@
 // 设置 VUE 的使用环境，通过 node 中的 process 模块来设置，类似于设置了一个全局变量
 // 通过此设置可以针对 Vue 的不同使用场景做不同的操作，后面的代码中会涉及到。
 process.env.VUE_ENV = 'server'
-//判断当前 node 的开发环境（一般有develop，test，production），可以通过 package.json
-//文件中 scripts 属性中的命令可以看出在运行 node 的时候通过 cross-env 插件来跨平台设置NODE_ENV
-// 这样做的目的同样是为了根据不同的开发环境做出不同的操作。
+
+//判断当前 node 的开发环境（一般有develop，test，production，分别对应开发环境、测试环境、生产环境），
+//可以通过 package.json 文件中 scripts 属性中的命令可以看出在运行 node 服务的时候
+//通过 cross-env 插件来跨平台设置 NODE_ENV ，这样做的目的同样是为了根据不同的开发环境做出不同的操作。
 const isProd = process.env.NODE_ENV === 'production'
-console.log(isProd);
 
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
+
 //用于请求根目录下的favicon.ico网站图标
 //推荐阅读：http://blog.csdn.net/syyling/article/details/45740337
 const favicon = require('serve-favicon')
@@ -17,22 +18,27 @@ const favicon = require('serve-favicon')
 const compression = require('compression')
 //序列化模块
 const serialize = require('serialize-javascript')
-//将参数 file 位置的字符解析到一个绝对路径里。
-//推荐阅读：http://www.jb51.net/article/58295.htm
+
+//resolve方法： 将参数 file 字符利用 path 模块解析到一个绝对路径里。
 const resolve = file => path.resolve(__dirname, file)
 
 // 生成 express 实例
 const app = express()
 
-let indexHTML // 通过 webpack 的 html-webpack-plugin 插件来生成
-let renderer  // 通过 webpack-generated 服务端打包产生
+// 通过 webpack 的 html-webpack-plugin 插件根据已有模板（/src/index.template.html）
+// 来生成 index.html 文件，该变量用来承载经过 parseIndex() 函数处理后的返回对象。
+let indexHTML
+// 通过 webpack 生成的服务器端的包（server-bundle.js）
+// 该变量用来承载经过 createRenderer() 函数处理后的返回结果。
+let renderer
 
 if (isProd) {
-  //在生产环境： 创建服务端渲染然后直接加载 webpack 打包出来的真实文件
+  //在生产环境： 创建服务端渲染并且直接加载 webpack 打包出来的真实文件(相对应的 else 里面加载的是内存中的文件)
   renderer = createRenderer(fs.readFileSync(resolve('./dist/server-bundle.js'), 'utf-8'))
   indexHTML = parseIndex(fs.readFileSync(resolve('./dist/index.html'), 'utf-8'))
 } else {
-  // 在开发环境：开发服务器设置监听和热启动，更新渲染 index HTML 文件的改变。
+  // 在开发环境：开启开发环境下带有监听和热启动设置的服务，在文件的改变的时候更新渲染 index HTML文件。
+  // 启动一个开发服务器
   require('./build/setup-dev-server')(app, {
     bundleUpdated: bundle => {
       renderer = createRenderer(bundle)
@@ -43,6 +49,7 @@ if (isProd) {
   })
 }
 
+// 服务端渲染函数
 function createRenderer (bundle) {
   //服务端渲染vue，创建一个渲染容器
   //推荐阅读： https://vuefe.cn/v2/guide/ssr.html
@@ -55,6 +62,7 @@ function createRenderer (bundle) {
   })
 }
 
+// 将模板拆分成两部分
 function parseIndex (template) {
   const contentMarker = '<!-- APP -->'
   const i = template.indexOf(contentMarker)
@@ -77,12 +85,13 @@ app.use('/manifest.json', serve('./manifest.json'))
 app.use('/dist', serve('./dist'))
 app.use('/public', serve('./public'))
 
-// 处理所有 get 请求 
+// 处理所有 get 请求
 app.get('*', (req, res) => {
   if (!renderer) {
     return res.end('waiting for compilation... refresh in a moment.')
   }
 
+  // 设置相应头
   res.setHeader("Content-Type", "text/html");
   var s = Date.now()
   const context = { url: req.url }
@@ -92,12 +101,14 @@ app.get('*', (req, res) => {
     res.write(indexHTML.head)
   })
 
+  //  ???????chunk
   renderStream.on('data', chunk => {
     res.write(chunk)
   })
 
   renderStream.on('end', () => {
     // embed initial store state
+    // 嵌入 初始 store 状态
     if (context.initialState) {
       res.write(
         `<script>window.__INITIAL_STATE__=${
@@ -109,6 +120,7 @@ app.get('*', (req, res) => {
     console.log(`whole request: ${Date.now() - s}ms`)
   })
 
+  // 错误处理
   renderStream.on('error', err => {
     if (err && err.code === '404') {
       res.status(404).end('404 | Page Not Found')

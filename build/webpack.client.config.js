@@ -3,7 +3,7 @@ const base = require('./webpack.base.config')
 const vueConfig = require('./vue-loader.config')
 const HTMLPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const SWPrecachePlugin = require('sw-precache-webpack-plugin')
+const SWPrecachePlugin = require('sw-precache-webpack-plugin')//?????????
 
 const config = Object.assign({}, base, {
   resolve: {
@@ -13,7 +13,7 @@ const config = Object.assign({}, base, {
   },
   plugins: (base.plugins || []).concat([
     // strip comments in Vue code
-    // 通过配置了DefinePlugin，那么这里面的标识就相当于全局变量，你的业务代码可以直接使用配置的标识。
+    // 通过配置DefinePlugin，那么这里面的标识就相当于全局变量，你的业务代码可以直接使用配置的标识。
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       'process.env.VUE_ENV': '"client"'
@@ -61,8 +61,9 @@ if (process.env.NODE_ENV === 'production') {
         warnings: false
       }
     }),
-    // 缓存额外的项目依赖？？？？？？
+    // 缓存生产环境下额外的项目依赖
     // 推荐阅读：https://www.npmjs.com/package/sw-precache-webpack-plugin
+    // 还有 service Worker : https://www.w3ctech.com/topic/866
     new SWPrecachePlugin({
       cacheId: 'vue-hn',
       filename: 'service-worker.js',

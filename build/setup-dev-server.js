@@ -15,9 +15,9 @@ module.exports = function setupDevServer (app, opts) {
     new webpack.NoErrorsPlugin()
   )
 
-  // ????????有啥意义呢？
-  // dev middleware
+  // dev middleware   开发服务中间件
   // express + webpack-dev-middleware 自定义实现 webpack-dev-server 服务功能
+  // 一个运行于内存中的文件系统。
   // 推荐阅读：http://www.tuicool.com/articles/MruEni 的关于webpack-dev-middleware部分来了解它
   const clientCompiler = webpack(clientConfig)
   const devMiddleware = require('webpack-dev-middleware')(clientCompiler, {
@@ -53,6 +53,7 @@ module.exports = function setupDevServer (app, opts) {
     stats.errors.forEach(err => console.error(err))
     stats.warnings.forEach(err => console.warn(err))
     //服务端渲染 具体实现函数在 server.js 中的createRenderer
+    //从内存中获取出 server-bundle.js 文件
     opts.bundleUpdated(mfs.readFileSync(outputPath, 'utf-8'))
   })
 }
