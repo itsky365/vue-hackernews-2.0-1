@@ -45,6 +45,8 @@ export default {
       // otherwise this is a page switch, start with blank and wait for data load.
       // we need these local state so that we can precisely control the timing
       // of the transitions.
+      // 如果这是第一次渲染，直接通过 store 里面的状态进行渲染，否则的话这将是一个从空白页面到等待数据加载的页面切换。
+      // 我们需要这些本地状态，这样我们能精确控制转换的时机。
       displayedPage: isInitialRender ? Number(this.$store.state.route.params.page) || 1 : -1,
       displayedItems: isInitialRender ? this.$store.getters.activeItems : []
     }

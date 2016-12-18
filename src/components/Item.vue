@@ -32,7 +32,8 @@ import { timeAgo } from '../filters'
 export default {
   name: 'news-item',
   props: ['item'],
-  // https://github.com/vuejs/vue/blob/next/packages/vue-server-renderer/README.md#component-caching
+  // 缓存组件
+  // 推荐阅读：https://www.npmjs.com/package/vue-server-renderer#component-caching
   serverCacheKey: props => {
     return `${
       props.item.id

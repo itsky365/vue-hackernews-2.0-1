@@ -6,7 +6,7 @@ export function host (url) {
   return parts.join('.')
 }
 
-// 计算之前某一时间距离现在多久
+// 计算之前某一时间距离现在多久，用于表示某一文章发表日期距离现在的时间
 export function timeAgo (time) {
   const between = Date.now() / 1000 - Number(time)
   if (between < 3600) {
