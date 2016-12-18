@@ -95,20 +95,24 @@ app.get('*', (req, res) => {
   res.setHeader("Content-Type", "text/html");
   var s = Date.now()
   const context = { url: req.url }
+  // 渲染我们的Vue实例作为流
   const renderStream = renderer.renderToStream(context)
 
+  // 将预先的HTML写入响应（或者说第一部分）
   renderStream.once('data', () => {
     res.write(indexHTML.head)
   })
 
-  //  ???????chunk
+  // 每当新的块被渲染
   renderStream.on('data', chunk => {
+    // 将块写入响应
     res.write(chunk)
   })
 
+  // 当所有的块被渲染完成
   renderStream.on('end', () => {
     // embed initial store state
-    // 嵌入 初始 store 状态
+    // 嵌入初始 store 的状态
     if (context.initialState) {
       res.write(
         `<script>window.__INITIAL_STATE__=${
@@ -116,18 +120,22 @@ app.get('*', (req, res) => {
         }</script>`
       )
     }
+    // 将第二部分 HTML写入响应
     res.end(indexHTML.tail)
     console.log(`whole request: ${Date.now() - s}ms`)
   })
 
-  // 错误处理
+  // 当渲染时发生错误的错误处理
   renderStream.on('error', err => {
     if (err && err.code === '404') {
       res.status(404).end('404 | Page Not Found')
       return
     }
     // Render Error Page or Redirect
+    // 渲染错误页面或者重定向
+    // 告诉客服端发生了错误
     res.status(500).end('Internal Error 500')
+    // 打印错误到控制台
     console.error(`error during render : ${req.url}`)
     console.error(err)
   })
