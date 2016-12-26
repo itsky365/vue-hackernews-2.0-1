@@ -15,11 +15,14 @@ module.exports = function setupDevServer (app, opts) {
     new webpack.NoErrorsPlugin()
   )
 
+  // webpack编译器
+  const clientCompiler = webpack(clientConfig);
+
   // dev middleware   开发服务中间件
   // express + webpack-dev-middleware 自定义实现 webpack-dev-server 服务功能
+  //一个轻量的node.js express服务器
   // 一个运行于内存中的文件系统。
   // 推荐阅读：http://www.tuicool.com/articles/MruEni 的关于webpack-dev-middleware部分来了解它
-  const clientCompiler = webpack(clientConfig)
   const devMiddleware = require('webpack-dev-middleware')(clientCompiler, {
     publicPath: clientConfig.output.publicPath,
     stats: {

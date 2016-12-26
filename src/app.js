@@ -17,7 +17,7 @@ import * as filters from './filters'
 sync(store, router)
 
 // register global utility filters.
-// 注册全局实用的过滤器   ?????
+// 注册全局实用的过滤器
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
@@ -27,7 +27,7 @@ Object.keys(filters).forEach(key => {
 // making them available everywhere as `this.$router` and `this.$store`.
 // 创建app实例
 // 这里我们映射路由信息和状态信息到所有的子组件中
-// 使它们可以在项目的任何地方通过 this.$router 和 this.#store 来访问 router 和 store 信息。
+// 使它们可以在项目的任何地方通过 this.$router 和 this.$store 来访问 router 和 store 信息。
 const app = new Vue({
   router,
   store,
