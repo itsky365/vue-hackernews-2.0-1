@@ -85,7 +85,7 @@ app.use('/manifest.json', serve('./manifest.json'))
 app.use('/dist', serve('./dist'))
 app.use('/public', serve('./public'))
 
-// 处理所有 get 请求
+// 处理所有 get 请求，其实这里的目的是为了 Vue 服务端渲染用的。
 app.get('*', (req, res) => {
   if (!renderer) {
     return res.end('waiting for compilation... refresh in a moment.')
