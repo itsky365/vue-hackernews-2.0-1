@@ -28,7 +28,7 @@ HackerNews 克隆是基于 HN 的官方 firebase API 、Vue 2.0 、vue-router �
 
 ## 开始构建
 
-** Node.js 版本必须是 6+**
+** Node.js 版本必须是 6+ **
 
 ``` bash
 # 安装依赖
@@ -43,3 +43,10 @@ npm run build
 # 在生产环境中启动服务
 npm start
 ```
+
+## 说明
+为了更好地学习 Vue 的服务端渲染，看完该官方实例后，对该实例做了部分注释，为了使自己更好地理解 Vue 的服务端渲染。
+
+另外，如果你对 Vue 的服务端渲染感兴趣，并且对官方实例中的某些地方感到疑惑，希望你可以在该 fork 项目中找到一些启发。
+
+想更好的学习 Vue 的服务端渲染，欢迎点击我 blog 上关于该 fork 项目的解读 http://chping2125.website

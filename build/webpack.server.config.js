@@ -16,7 +16,7 @@ module.exports = Object.assign({}, base, {
       'create-api': './create-api-server.js'
     })
   },
-  //外部依赖，不需要打包进bundle
+  //外部依赖，不需要打包进 server-bundle.js
   //推荐阅读： https://github.com/zhengweikeng/blog/issues/10
   externals: Object.keys(require('../package.json').dependencies),
   plugins: [

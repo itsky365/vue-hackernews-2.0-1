@@ -7,8 +7,10 @@ process.env.VUE_ENV = 'server'
 //通过 cross-env 插件来跨平台设置 NODE_ENV ，这样做的目的同样是为了根据不同的开发环境做出不同的操作。
 const isProd = process.env.NODE_ENV === 'production'
 
+// nodeJS 中基本的内置模块
 const fs = require('fs')
 const path = require('path')
+// 基于 nodeJS 的框架
 const express = require('express')
 
 //用于请求根目录下的favicon.ico网站图标
@@ -62,7 +64,7 @@ function createRenderer (bundle) {
   })
 }
 
-// 将模板拆分成两部分
+// 将模板拆分成两部分，目的是服务端渲染时，使用bundleRenderer.rendererToStream 流式输出
 function parseIndex (template) {
   const contentMarker = '<!-- APP -->'
   const i = template.indexOf(contentMarker)
@@ -85,7 +87,8 @@ app.use('/manifest.json', serve('./manifest.json'))
 app.use('/dist', serve('./dist'))
 app.use('/public', serve('./public'))
 
-// 处理所有 get 请求，其实这里的目的是为了 Vue 服务端渲染用的。
+// 处理所有 get 请求，其实这里的目的是为了 Vue 服务端渲染用的，再具体说就是为了服务端渲染的
+// 流式输出。推荐阅读：https://www.npmjs.com/package/vue-server-renderer#rendererrendertostreamvm
 app.get('*', (req, res) => {
   if (!renderer) {
     return res.end('waiting for compilation... refresh in a moment.')

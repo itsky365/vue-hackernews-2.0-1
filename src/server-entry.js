@@ -9,7 +9,7 @@ const isDev = process.env.NODE_ENV !== 'production'
 // return a Promise that resolves to the app instance.
 // 这个导出函数叫 bundleRenderer，是我们在实际的 render 之前执行数据预取来确定我们应用程序的状态的。
 // 因为数据的获取是异步的，所以这个函数将返回解决 vue 实例的 Promise 对象。
-// 对于该入口到处函数的配置，在 vue-server-renderer 的 npm 包中有说明
+// 对于该入口导出函数的配置，在 vue-server-renderer 的 npm 包中有说明
 // 地址：https://www.npmjs.com/package/vue-server-renderer#creating-the-server-bundle
 export default context => {
   const s = isDev && Date.now()

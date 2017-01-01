@@ -15,7 +15,7 @@ import { app, store } from './app'
 // 再说的直白点就是：客户端渲染的时候 上面引入的 vue 实例（已包括 Vuex 和 router 信息）
 // 在服务端被创建并且初始化了，然后就将这个 vue 实例装载到页面上，下面 app.$mount('#app')就是在干这个事。
 // 但是客户端来渲染的时候需要把 state 内的状态内嵌到客户端的全局变量上。
-//????????？？？？？？
+//
 store.replaceState(window.__INITIAL_STATE__)
 
 // actually mount to DOM
