@@ -49,4 +49,4 @@ npm start
 
 另外，如果你对 Vue 的服务端渲染感兴趣，并且对官方实例中的某些地方感到疑惑，希望你可以在该 fork 项目中找到一些启发。
 
-想更好的学习 Vue 的服务端渲染，欢迎点击我 blog 上关于该 fork 项目的解读 http://chping2125.website
+想更好的学习 vue-server-renderer 的服务端渲染依赖包，可以看这里 http://chping.website/2017/01/01/vue-server-renderer/
